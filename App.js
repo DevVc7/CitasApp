@@ -5,14 +5,19 @@ import { StatusBar } from "expo-status-bar"
 import { Ionicons } from "@expo/vector-icons"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 
+// Importar proveedores de contexto
+import { ServiceProvider } from "./src/context/ServiceContext"
+import { BookingProvider } from "./src/context/BookingContext"
+import { UserProvider } from "./src/context/UserContext"
+
 // Importar pantallas
-import HomeScreen from "./screens/HomeScreen"
-import ServicesScreen from "./screens/ServicesScreen"
-import BookingsScreen from "./screens/BookingsScreen"
-import ProfileScreen from "./screens/ProfileScreen"
-import BookingDetailScreen from "./screens/BookingDetailScreen"
-import BookingConfirmScreen from "./screens/BookingConfirmScreen"
-import BookingSuccessScreen from "./screens/BookingSuccessScreen"
+import HomeScreen from "./src/screens/HomeScreen"
+import ServicesScreen from "./src/screens/ServicesScreen"
+import BookingsScreen from "./src/screens/BookingsScreen"
+import ProfileScreen from "./src/screens/ProfileScreen"
+import BookingDetailScreen from "./src/screens/BookingDetailScreen"
+import BookingConfirmScreen from "./src/screens/BookingConfirmScreen"
+import BookingSuccessScreen from "./src/screens/BookingSuccessScreen"
 
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
@@ -53,26 +58,36 @@ function MainTabs() {
 export default function App() {
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
-        <StatusBar style="auto" />
-        <Stack.Navigator>
-          <Stack.Screen name="Main" component={MainTabs} options={{ headerShown: false }} />
-          <Stack.Screen name="BookingDetail" component={BookingDetailScreen} options={{ title: "Reservar Cita" }} />
-          <Stack.Screen
-            name="BookingConfirm"
-            component={BookingConfirmScreen}
-            options={{ title: "Confirmar Reserva" }}
-          />
-          <Stack.Screen
-            name="BookingSuccess"
-            component={BookingSuccessScreen}
-            options={{
-              title: "Reserva Exitosa",
-              headerShown: false,
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <ServiceProvider>
+        <BookingProvider>
+          <UserProvider>
+            <NavigationContainer>
+              <StatusBar style="auto" />
+              <Stack.Navigator>
+                <Stack.Screen name="Main" component={MainTabs} options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="BookingDetail"
+                  component={BookingDetailScreen}
+                  options={{ title: "Reservar Cita" }}
+                />
+                <Stack.Screen
+                  name="BookingConfirm"
+                  component={BookingConfirmScreen}
+                  options={{ title: "Confirmar Reserva" }}
+                />
+                <Stack.Screen
+                  name="BookingSuccess"
+                  component={BookingSuccessScreen}
+                  options={{
+                    title: "Reserva Exitosa",
+                    headerShown: false,
+                  }}
+                />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </UserProvider>
+        </BookingProvider>
+      </ServiceProvider>
     </SafeAreaProvider>
   )
 }
